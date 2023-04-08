@@ -38,7 +38,9 @@ if (empty($items_extra->image_path)) {
 
                                 <?php echo render_input('items_extra[kilo_watt_piek]', _l('kilo_watt_piek'), $items_extra->kilo_watt_piek, "number", ['step' => 'any']); ?>
                                 <?php echo render_input('items_extra[kilo_watt_uur]', _l('kilo_watt_uur'), $items_extra->kilo_watt_uur, "number", ['step' => 'any']); ?>
-                                <?php echo render_input('items_extra[gewicht]', _l('gewicht' ), $items_extra->gewicht, "number", ['step' => 'any']); ?>
+                                <?php echo render_input('items_extra[gewicht]', _l('gewicht'), $items_extra->gewicht, "number", ['step' => 'any']); ?>
+
+                                <?php echo render input('items_extra[inkoopprijs]', _l('inkoopprijs'),$items_extra->inkoopprijs, "number", ['step' => 'any']); ?>
 
                                 <?php echo render_textarea('items_extra[estimate_description]', _l('estimate_description'), $items_extra->estimate_description, ['maxLength' => 1023]); ?>
                                 <?php echo render_textarea('items_extra[technical_description]', _l('technical_description'), $items_extra->technical_description, ['maxLength' => 1023]); ?>
