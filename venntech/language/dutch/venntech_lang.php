@@ -1,0 +1,234 @@
+<?php
+
+defined('BASEPATH') or exit('No direct script access allowed');
+
+// Views Titles
+$lang['product_groep']                            = 'Product Groep';
+$lang['product_groepen']                          = 'Product Groepen';
+$lang['description']                              = 'Omschrijving';
+$lang['product']                                  = 'Product';
+$lang['producten']                                = 'Producten';
+$lang['estimate_description']                     = 'Offerte PDF Omschrijving';
+$lang['technical_description']                    = 'Technische Omschrijving';
+$lang['image']                                    = 'Afbeelding';
+$lang['existing_image']                           = 'Bestaande Afbeelding';
+$lang['samengestelde_product']                    = 'Samengestelde Product';
+$lang['samengestelde_producten']                  = 'Samengestelde Producten';
+$lang['project_template']                         = 'Project Template';
+$lang['project_templates']                        = 'Project Templates';
+$lang['estimate_template']                        = 'Offerte Template';
+$lang['estimate_templates']                       = 'Offerte Templates';
+$lang['estimate_template_element']                = 'Offerte Template Onderdeel';
+$lang['estimate_template_elements']               = 'Offerte Templates Onderdeel';
+$lang['estimate_pdf_layout']                      = 'Offerte Layout';
+$lang['estimate_pdf_layouts']                     = 'Offerte PDF Layouts';
+$lang['inspectie_rapport']                        = 'Inspectie Rapport';
+$lang['inspectie_rapporten']                      = 'Inspectie Rapporten';
+$lang['plaatsing_datum']                          = 'Plaatsing Datum';
+$lang['plaatsing_datums']                         = 'Plaatsing Datums';
+$lang['type_kortingen']                           = 'Type Kortingen';
+$lang['type_korting']                             = 'Type Korting';
+$lang['project_tasks']                            = 'Project Taken';
+$lang['is_voor_btw']                              = 'Voor De BTW?';
+$lang['discount_percentage']                      = 'Kortingspercentage';
+$lang['verval_datum']                             = 'Verval Datum';
+$lang['task_comment']                             = 'Comment';
+$lang['forfait']                                  = 'Forfait';
+$lang['venntech-terugverdienst_simulatie']       = 'Terugverdienst  Simulatie';
+$lang['inputparameters']                          = 'Inputparameters';
+$lang['zonnepanelen']                             = 'Zonnepanelen';
+$lang['omvormers']                                = 'Omvormers';
+$lang['hespul_waarde']                            = 'Hespul Waarde';
+$lang['plaatsing']                                = 'Plaatsing';
+$lang['structuur']                                = 'Structuur';
+$lang['materiaal_elek']                           = 'Materiaal Elek';
+
+
+
+//Tasks
+$lang['task_inspectie_rapport']                   = 'Taak Inspectie Rapporten';
+$lang['task_estimate']                            = 'Taak Offerte';
+$lang['venntech-benodigdemat-form']               = 'Benodigdemat Form';
+$lang['venntech-plaatsing-datum']                 = 'Plaatsing Datum';
+$lang['venntech-plaatsing']                       = 'Plaatsing';
+$lang['venntech-inspectie-document']              = 'Inspectie Document';
+$lang['venntech-oplever-document']                = 'Oplever Document';
+$lang['venntech-monitoring']                      = 'Monitoring';
+$lang['venntech-schema']                          = 'Schema';
+$lang['venntech-keuring']                         = 'Keuring';
+$lang['venntech-aanmelding-netbeheer']            = 'Aanmelding Netbeheerder';
+
+// Offerte template labels
+$lang['multiply']                                 ='Vermenigvuldigen';
+$lang['number_of_panels']                         ='Aantal panelen';
+$lang['zonnepaneel_merk']                         ='Zonnepaneel Merk';
+$lang['zonnepanneel_vermogen']                    ='Zonnepanneel vermogen';
+$lang['totaal_vermogen']                          ='Totaal vermogen';
+$lang['multiply_with_number_of_panels']           ='Vermenigvuldigen met aantal panelen';
+$lang['estimates_id']                             ='Estimates ID';
+$lang['estimate_template_id']                     ='Estimate Template';
+$lang['tax_rate']                                 ='Belastingtarief';
+$lang['margin_of_profit']                         ='Winstmarge';
+$lang['naam_sales_verkoper']                      ='Naam Sales Verkoper';
+$lang['estimate_elements']                        = 'Offerte Onderdelen';
+$lang['kilo_watt_piek']                           = 'kWp';
+$lang['kilo_watt_uur']                            = 'kWh';
+
+// Inspectie rapport labels
+$lang['aardingsonderbreker_aanwezig']             ='Aardingsonderbreker aanwezig';
+$lang['digitale_meter_aanwezig']                  ='Digitale meter aanwezig';
+$lang['type_aansluiting']                         ='Type aansluiting';
+$lang['gemeente']                                 ='Gemeente';
+$lang['ean_nr']                                   ='EAN NR';
+$lang['dag_verbruik']                             ='Dag Verbruik';
+$lang['dal_verbruik']                             ='Dal Verbruik';
+$lang['dag_injectie']                             ='Dag injectie';
+$lang['dal_injectie']                             ='Dal injectie';
+$lang['gemiddelde_nacht_verbuik']                 ='Gemiddelde nacht verbuik';
+$lang['ampère']                                   ='Ampère';
+$lang['differentieel_300mA_aanwezig']             ='Differentieel 300mA aanwezig';
+$lang['differentieel_30mA_aanwezig']              ='Differentieel 30mA aanwezig';
+$lang['extra_zekeringkast_nodig']                 ='Extra zekeringkast nodig';
+$lang['hellend']                                  ='Hellend';
+$lang['andere']                                   ='Andere';
+$lang['onderdak']                                 ='Onderdak';
+$lang['gemetste_nok_en_gevelpannen']              ='Gemetste nok en gevelpannen';
+$lang['sarking_dak']                              ='Sarking dak';
+$lang['hoogte_dakgoot']                           ='Hoogte dakgoot';
+$lang['plat_dak']                                 ='Plat dak';
+$lang['dakdoorvoer']                              ='Dakdoorvoer';
+$lang['materiaal_dakgoot']                        ='Materiaal dakgoot';
+$lang['woning']                                   ='Woning';
+$lang['nieuwbouw']                                ='Nieuwbouw';
+$lang['gerenoveerd']                              ='Gerenoveerd';
+$lang['bestaande']                                ='Bestaande';
+$lang['schaduw']                                  ='Schaduw';
+$lang['geen']                                     ='geen';
+$lang['licht']                                    ='licht';
+$lang['middelmatig']                              ='middelmatig';
+$lang['veel']                                     ='veel';
+$lang['geen']                                     ='geen';
+$lang['orientatie']                               ='Orientatie';
+$lang['oost']                                     ='Oost';
+$lang['west']                                     ='West';
+$lang['zo']                                       ='ZO';
+$lang['zuid']                                     ='Zuid';
+$lang['zw']                                       ='ZW';
+$lang['hellingsgraad']                            ='Hellingsgraad';
+$lang['lengte_ac']                                ='Lengte AC';
+$lang['lengte_dc']                                ='Lengte DC';
+$lang['kabeltraject']                             ='Kabeltraject';
+$lang['gevel']                                    ='Gevel';
+$lang['dakdoorvoer']                              ='Dakdoorvoer';
+$lang['koker']                                    ='Koker';
+$lang['west']                                     ='West';
+$lang['type_paneel']                              ='Type paneel';
+$lang['aantal']                                   ='Aantal';
+$lang['type_omvormer']                            ='Type omvormer';
+$lang['plaats_omvormer(s)']                       ='Plaats omvormer(s)';
+$lang['batterij']                                 ='Batterij';
+$lang['smart_meter']                              ='Smart Meter';
+$lang['monitoring']                               ='Monitoring?';
+$lang['hindernissen']                             ='Hindernissen';
+$lang['opmerking_veiligheid']                     ='Opmerking Veiligheid';
+$lang['specifieke_afspraken_en_opmerkingen']      ='Specifieke afspraken en opmerkingen';
+$lang['foto_netaansluiting']                      ='Foto Netaansluiting';
+$lang['foto_zekeringkast']                        ='Foto Zekeringkast';
+$lang['foto_aardingsonderbreker']                 ='Foto Aardingsonderbreker';
+$lang['foto_hoofddiff']                           ='Foto Hoofddiff';
+$lang['foto_diff_vochtige_ruimtes']               ='Foto Diff Vochtige Ruimtes';
+$lang['foto_dak']                                 ='Foto Dak';
+$lang['foto_satteliet']                           ='Foto Satteliet';
+$lang['foto_legplan']                             ='Foto Legplan';
+$lang['foto_plaats_omvormer']                     ='Foto Plaats Omvormer';
+$lang['foto_plaats_batterij']                     ='Foto Plaats Batterij';
+$lang['foto_kabeltraject']                        ='Foto Kabeltraject';
+$lang['foto_hindernissen']                        ='Foto Hindernissen';
+
+
+// Opleverdocumenten labels
+$lang['opleverdocument']                          ='Opleverdocument';
+$lang['datum_van_plaatsing']                      ='Datum van plaatsing';
+$lang['datum']                                    ='Datum';
+$lang['electricien']                              ='Electricien';
+$lang['dakwerker']                                ='Dakwerker';
+$lang['extra_man']                                ='Extra man';
+$lang['aantal_panelen']                           ='Aantal panelen';
+$lang['aantal_velden']                            ='Aantal velden';
+$lang['aantal_q_relais']                          ='Aantal Q Relais';
+$lang['type']                                     ='Type';
+$lang['micro/optimizers']                         ='Micro/Optimizers';
+$lang['code']                                     ='Code';
+$lang['type_dak']                                 ='Type Dak';
+$lang['aantal_haken_leien_tegelpannen']           ='Aantal Haken Leien Tegelpannen';
+$lang['afgewerkt']                                ='Afgewerkt';
+$lang['verbruiksmateriaal']                       ='Verbruiksmateriaal';
+$lang['verbruiksmaterialen']                      ='Verbruiksmaterialen';
+
+$lang['internet_extra']                           ='Internet extras';
+$lang['klein_materiaal']                          ='Klein materiaal';
+$lang['extra_materiaal']                          ='Extra materiaal';
+$lang['extra_werkuren']                           ='Extra werkuren';
+$lang['opmerkingen']                              ='Opmerking';
+$lang['extra_gegevens']                           ='Extra Gegevens';
+$lang['aarding_goed_en_gecontroleerd']            ='Aarding Goed en Gecontroleerd';
+$lang['totaal_prijs']                             ='Totaal Prijs';
+$lang['foto_dak_na_plaatsing']                    ='Foto dak na plaatsing';
+$lang['foto_aangepaste_zekeringkast']             ='Foto aangepaste zekeringkast';
+$lang['foto_weerstand_aarding']                   ='Foto weerstand aarding';
+$lang['foto_kabeltraject']                        ='Foto kabeltraject';
+$lang['foto_omvormer_locatie']                    ='Foto omvormer locatie';
+$lang['foto_omvormer_etiket']                     ='Foto omvormer etiket (sn + pic&rid)';
+$lang['foto_batteri_locatie']                     ='Foto batterij locatie';
+$lang['foto_werking_omvormer']                    ='Foto werking omvormer';
+$lang['foto_SN_zonnepanelen']                     ='Foto SN zonnepanelen';
+
+
+// delete errors
+$lang['delete_estimate_template_is_used']         ='Offerte template is al gebruikt, kan het niet verwijderen.';
+
+//berekenen
+$lang['vermogen_pv_panelen']                      ='Vermogen PV panelen (kWp)';
+$lang['capaciteit_batterij']                      ='Capaciteit batterij (kWh)';
+$lang['totaalprijs_zonnepanelen']                 ='Totaalprijs zonnepanelen (€)';
+$lang['kostprijs_hybride_omvormer']               ='Kostprijs Hybride omvormer (€)';
+$lang['zelfverbruik_zonder_batterij']             ='Zelfverbruik zonder batterij (%)';
+$lang['eenheidprijs_batterij']                    ='Eenheidprijs batterij (€/kWh)';
+$lang['vollasturen']                              ='Vollasturen (uur)';
+$lang['premie_tot_31_maart']                      ='Premie tot 31 maart (€/kWh)';
+$lang['batterijpremie_tot_4_kWh']                 ='Batterijpremie tot 4 kWh (€/kWh)';
+$lang['batterijpremie_4-6_kWh']                   ='Batterijpremie 4-6 kWh (€/kWh)';
+$lang['batterijpremie_>_6_kWh']                   ='Batterijpremie > 6 kWh (€/kWh)';
+$lang['aftopping_batterijpremie']                 ='Aftopping batterijpremie (kWh)';
+$lang['verhouding_capaciteit_kWh/kWp_PV']         ='Verhouding capaciteit kWh/kWp PV';
+$lang['waarde_capaciteit']                        ='Waarde capaciteit ((€/kW)';
+$lang['piek_zonder_batterij']                     ='Piek zonder batterij';
+$lang['piek_met_batterij']                        ='Piek met batterij';
+$lang['bonus_bij_investering_in_batterij']        ='Bonus bij investering in batterij';
+$lang['geschatte_zelfverbruik_met_batterij']      ='Geschatte zelfverbruik met batterij';
+$lang['eenheidprijs_elektriciteit_voor_2022']     ='Eenheidprijs elektriciteit voor 2022';
+$lang['eenheidsprijs_elektriciteit_na_2022']      ='Eenheidsprijs elektriciteit na 2022';
+$lang['terugleververgoeding']                     ='Terugleververgoeding';
+$lang['geschatte_terugverdiendtijd_investering_met_batterij']                  ='Geschatte terugverdiendtijd investering met batterij';
+$lang['geschatte_terugverdiendtijd_investering_zonder_batterij']               ='Geschatte terugverdiendtijd investering zonder batterij';
+$lang['investering_zonnepanelen']                 ='Investering zonnepanelen';
+$lang['berekende_premie_zonnepanelen']            ='Berekende premie zonnepanelen';
+$lang['netto_investering']                        ='Netto investering';
+$lang['geldig_vanaf_1_april']                     ='Geldig Vanaf 1 April 2021';
+$lang['totaal']                                   ='Totaal';
+$lang['kostprijs_hybride_omvormer']               ='Kostprijs Hybride Omvormer';
+$lang['voor_tarief_zonder_batterij']              ='Cijfers voor invoeren van capaciteitstarief';
+$lang['na_tarief_zonder_batterij']                ='Cijfers na invoeren van capaciteitstarief';
+$lang['pv_installatie_zonder_batterij']           ='PV installatie zonder batterij';
+$lang['pv_installatie_met_batterij']              ='PV installatie met batterij';
+$lang['eerste_jaar']                              ='Eerste Jaar';
+$lang['jaarlijks']                                ='Jaarlijks';
+$lang['prijs_1kwh']                               ='prijs eenheid 1/kWh';
+$lang['forfait_bedragen']                         ='Forfait Bedragen';
+$lang['berekende_premie_zonnepanelen']            ='Berekende premie zonnepanelen';
+$lang['installatie']                              ='Installatie';
+$lang['add_and_save']                             ='Toevoegen en Opslaan';
+$lang['gewicht']                                  ='Gewicht(kg)';
+$lang['bebat_batterij']                           ='Bebat Batterij';
+$lang['unit_prijs_per_panel']                     ='Unit Prijs Per Panel';
+
