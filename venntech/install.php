@@ -159,7 +159,7 @@ add_option('company_vat', 'BE 0711.902.202');
 $table = "{$db_prefix}pc_items_extra";
 if (!$CI->db->table_exists($table)) {
 
-    $CI->db->query("CREATE TABLE " . $table . " (
+     $CI->db->query("CREATE TABLE " . $table . " (
                       id int(11) NOT NULL,
                       item_id int(11) NOT NULL,
                       estimate_description text,
@@ -169,11 +169,15 @@ if (!$CI->db->table_exists($table)) {
                       gewicht decimal(15, 2),
                       active boolean default true,
                       image_path varchar(1023),
-                      forfait boolean default false
+                      forfait boolean default false,
+                      inkoopprijs decimal(15, 2),
+                      aanbevolen_verkoopprijs decimal(15, 2),
+                      transport_prijs decimal(15, 2) default '10.00'
                     ) ENGINE=InnoDB DEFAULT CHARSET=" . $charset . ";");
 
     $CI->db->query("ALTER TABLE " . $table . " ADD PRIMARY KEY (id);");
     $CI->db->query("ALTER TABLE " . $table . " MODIFY id int(11) NOT NULL AUTO_INCREMENT;");
+    $CI->db->query("ALTER TABLE " . $table . " ADD CONSTRAINT fk_item_id FOREIGN KEY (item_id) REFERENCES " . $db_prefix . "items(id) ON DELETE CASCADE;");
 
 }
 
