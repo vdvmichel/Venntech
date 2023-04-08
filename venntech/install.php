@@ -217,7 +217,7 @@ function getItemsGroupId($CI, $db_prefix, $name)
     }
 }
 
-function insertItems($CI, $db_prefix, $group_id, $description, $rate, $kWp = 0, $kWh = 0, $forfait = 0, $gewicht = 0)
+function insertItems($CI, $db_prefix, $group_id, $description, $rate, $kWp = 0, $kWh = 0, $forfait = 0, $gewicht = 0, $inkoopprijs = 0)
 {
     $CI->db->where('description', $description);
     $item = $CI->db->get("{$db_prefix}items")->row();
@@ -225,14 +225,14 @@ function insertItems($CI, $db_prefix, $group_id, $description, $rate, $kWp = 0, 
         $CI->db->query("insert into {$db_prefix}items (description, rate, group_id) values('" . $description . "'," . $rate . ", " . $group_id . ");");
         $item_id = $CI->db->insert_id();
         // insert also into pc_items_extra
-        $CI->db->query("insert into {$db_prefix}pc_items_extra (item_id, kilo_watt_piek, kilo_watt_uur, forfait, gewicht) values(" . $item_id . ", " . $kWp . ", " . $kWh . ", " . $forfait . "," . $gewicht . ");");
+        $CI->db->query("insert into {$db_prefix}pc_items_extra (item_id, kilo_watt_piek, kilo_watt_uur, forfait, gewicht) values(" . $item_id . ", " . $kWp . ", " . $kWh . ", " . $forfait . "," . $gewicht . "," . $inkoopprijs . ");");
 
         return $item_id;
     } else {
         $CI->db->where('item_id', $item->id);
         $item_extra = $CI->db->get("{$db_prefix}pc_items_extra")->row();
         if (!$item_extra) {
-            $CI->db->query("insert into {$db_prefix}pc_items_extra (item_id, kilo_watt_piek, kilo_watt_uur, forfait,gewicht) values(" . $item->id . ", " . $kWp . ", " . $kWh . ", " . $forfait . "," . $gewicht . ");");
+            $CI->db->query("insert into {$db_prefix}pc_items_extra (item_id, kilo_watt_piek, kilo_watt_uur, forfait,gewicht) values(" . $item->id . ", " . $kWp . ", " . $kWh . ", " . $forfait . "," . $gewicht . "," . $inkoopprijs . ");");
         }
 
         return $item->id;
