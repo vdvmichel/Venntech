@@ -31,20 +31,24 @@ if (empty($items_extra->image_path)) {
                         <div class="row">
                             <div class="col-md-12">
 
-                                <?php echo render_select('items[group_id]', $groups, ['id', 'name'], _l('item_group_name'), $items->group_id, ['required' => true]); ?>
+                            <?php echo render_select('items[group_id]', $groups, ['id', 'name'], _l('item_group_name'), $items->group_id, ['required' => true]); ?>
                                 <?php echo render_input('items[description]', _l('invoice_item_add_edit_description'), $items->description, "text", ['required' => true, 'maxLength' => 255]); ?>
                                 <?php echo render_textarea('items[long_description]', _l('invoice_item_long_description'), $items->long_description, ['maxLength' => 1023]); ?>
                                 <?php echo render_input('items[rate]', _l('invoice_item_add_edit_rate_currency'), $items->rate, "number", ['required' => true, 'step' => 'any']); ?>
+                                
+                                <?php echo render_input('items_extra[inkoopprijs]', _l('inkoopprijs' ), $items_extra->inkoopprijs, "number", ['step' => 'any']); ?>
+                                <?php echo render_input('items_extra[aanbevolen_verkoopprijs]', _l('aanbevolen_verkoopprijs' ), $items_extra->aanbevolen_verkoopprijs, "number", ['step' => 'any']); ?>
+                                <?php echo render_input('items_extra[transport_prijs]', _l('transport_prijs' ), $items_extra->transport_prijs, "number", ['step' => 'any']); ?>
 
                                 <?php echo render_input('items_extra[kilo_watt_piek]', _l('kilo_watt_piek'), $items_extra->kilo_watt_piek, "number", ['step' => 'any']); ?>
                                 <?php echo render_input('items_extra[kilo_watt_uur]', _l('kilo_watt_uur'), $items_extra->kilo_watt_uur, "number", ['step' => 'any']); ?>
-                                <?php echo render_input('items_extra[gewicht]', _l('gewicht'), $items_extra->gewicht, "number", ['step' => 'any']); ?>
+                                <?php echo render_input('items_extra[gewicht]', _l('gewicht' ), $items_extra->gewicht, "number", ['step' => 'any']); ?>
 
-                                <?php echo render input('items_extra[inkoopprijs]', _l('inkoopprijs'),$items_extra->inkoopprijs, "number", ['step' => 'any']); ?>
 
                                 <?php echo render_textarea('items_extra[estimate_description]', _l('estimate_description'), $items_extra->estimate_description, ['maxLength' => 1023]); ?>
                                 <?php echo render_textarea('items_extra[technical_description]', _l('technical_description'), $items_extra->technical_description, ['maxLength' => 1023]); ?>
                                 <?php render_yes_no_option_venntech('items_extra[forfait]', _l('forfait'), $items_extra->forfait); ?>
+
 
                                 <!-- IMAGE Start -->
                                 <?php if (!empty($items_extra->image_path)) { ?>

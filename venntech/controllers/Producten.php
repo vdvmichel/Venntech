@@ -106,7 +106,9 @@ class Producten extends AdminController
                 $items_extra->kilo_watt_piek = "";
                 $items_extra->kilo_watt_uur = "";
                 $items_extra->gewicht = "";
-                $items_extra->inkoopprijs ="";
+                $items_extra->inkoopprijs = "";
+                $items_extra->aanbevolen_verkoopprijs = "";
+                $items_extra->transport_prijs = "";
 
                 $items = new stdClass();
                 $items->itemid = "";
