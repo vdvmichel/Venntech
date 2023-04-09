@@ -108,5 +108,19 @@ init_tail();
         });
     });
 </script>
+<script type="text/javascript">
+    function calculate_price() {
+        var transport_prijs = parseFloat(document.getElementById('transport_prijs').value);
+        var inkoopprijs = parseFloat(document.getElementById('inkoopprijs').value);
+        if (isNaN(transport_prijs)) {
+            transport_prijs = 0;
+        }
+        if (isNaN(inkoopprijs)) {
+            inkoopprijs = 0;
+        }
+        var selling_price = (inkoopprijs + transport_prijs) * 1.25;
+        document.getElementById('aanbevolen_verkoopprijs').value = aanbevolen_verkoopprijs.toFixed(2);
+    }
+</script>
 </body>
 </html>
