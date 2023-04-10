@@ -15,6 +15,7 @@ if (empty($items_extra->image_path)) {
 }
 
 ?>
+
 <div id="wrapper">
     <div class="content ">
         <div class="row ">
@@ -35,14 +36,16 @@ if (empty($items_extra->image_path)) {
                                 <?php echo render_textarea('items[long_description]', _l('invoice_item_long_description'), $items->long_description, ['maxLength' => 1023]); ?>
                                 <?php echo render_input('items[rate]', _l('invoice_item_add_edit_rate_currency'), $items->rate, "number", ['required' => true, 'step' => 'any']); ?>
                                 
-                                <?php echo render_input('items_extra[inkoopprijs]', _l('inkoopprijs' ), $items_extra->inkoopprijs, "number", ['step' => 'any']); ?>
-                                <?php echo render_input('items_extra[aanbevolen_verkoopprijs]', _l('aanbevolen_verkoopprijs' ), $items_extra->aanbevolen_verkoopprijs, "number", ['step' => 'any']); ?>
-                                <?php echo render_input('items_extra[transport_prijs]', _l('transport_prijs' ), $items_extra->transport_prijs, "number", ['step' => 'any']); ?>
 
                                 <?php echo render_input('items_extra[kilo_watt_piek]', _l('kilo_watt_piek'), $items_extra->kilo_watt_piek, "number", ['step' => 'any']); ?>
                                 <?php echo render_input('items_extra[kilo_watt_uur]', _l('kilo_watt_uur'), $items_extra->kilo_watt_uur, "number", ['step' => 'any']); ?>
                                 <?php echo render_input('items_extra[gewicht]', _l('gewicht' ), $items_extra->gewicht, "number", ['step' => 'any']); ?>
+                                
+                                <?php echo render_input('items_extra[inkoopprijs]', _l('inkoopprijs' ), $items_extra->inkoopprijs, "number", ['step' => 'any']); ?>
+                                <?php echo render_input('items_extra[aanbevolen_verkoopprijs]', _l('aanbevolen_verkoopprijs' ), $items_extra->aanbevolen_verkoopprijs, "number", ['step' => 'any', 'readonly' => 'readonly']); ?>
+                                <?php echo render_input('items_extra[transport_prijs]', _l('transport_prijs' ), $items_extra->transport_prijs, "number", ['step' => 'any']); ?>
 
+                                
                                 <?php echo render_textarea('items_extra[estimate_description]', _l('estimate_description'), $items_extra->estimate_description, ['maxLength' => 1023]); ?>
                                 <?php echo render_textarea('items_extra[technical_description]', _l('technical_description'), $items_extra->technical_description, ['maxLength' => 1023]); ?>
                                 <?php render_yes_no_option_venntech('items_extra[forfait]', _l('forfait'), $items_extra->forfait); ?>
@@ -83,6 +86,7 @@ if (empty($items_extra->image_path)) {
                             <?php } ?>
 
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -114,15 +118,14 @@ function calculateSellingPrice() {
 }
 
 $(document).ready(function() {
-  $("input[name=inkoop_prijs], input[name=transport_prijs]").on("input", function() {
+  $("input[name=inkoop_prijs], input[name=transport]").on("input", function() {
     var inkoop_prijs = $("input[name=inkoop_prijs]").val();
-    var transport_prijs = parseFloat($("input[name=transport_prijs]").val());
+    var transport_prijs = $("input[name=transport]:checked").val() == "on" ? 0 : parseFloat($("input[name=transport]:checked").val());
     var aanbevolen_verkoopprijs = (parseFloat(inkoop_prijs) + transport_prijs) * 1.25;
-    $("input[name=aanbevolen_verkoopprijs]").val(aanbevolen_verkoopprijs.toFixed(2));
+    $("input[name=aanbevolen_verkoopprijs]").val(aanbevolen_verkoopprijs.toFixed(2)).attr("readonly", true);
   });
-});
 
 </script>
 
-</script>
+</body>
 </html>
