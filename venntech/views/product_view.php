@@ -110,7 +110,7 @@ init_tail();
 </script>
 
 <script>
-function calculateSellingPrice() {
+$function calculateSellingPrice() {
   var purchasePrice = parseFloat(document.getElementById('inkoop_prijs').value);
   var transportPrice = parseFloat(document.getElementById('transport_prijs').value);
   var recommendedSellingPrice = (purchasePrice + transportPrice) * 1.25;
