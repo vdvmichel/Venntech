@@ -108,24 +108,5 @@ init_tail();
         });
     });
 </script>
-
-<script>
-$function calculateSellingPrice() {
-  var purchasePrice = parseFloat(document.getElementById('inkoop_prijs').value);
-  var transportPrice = parseFloat(document.getElementById('transport_prijs').value);
-  var recommendedSellingPrice = (purchasePrice + transportPrice) * 1.25;
-  document.getElementById('aanbevolen_verkoopprijs').value = recommendedSellingPrice.toFixed(2);
-}
-
-$(document).ready(function() {
-  $("input[name=inkoop_prijs], input[name=transport]").on("input", function() {
-    var inkoop_prijs = $("input[name=inkoop_prijs]").val();
-    var transport_prijs = $("input[name=transport]:checked").val() == "on" ? 0 : parseFloat($("input[name=transport]:checked").val());
-    var aanbevolen_verkoopprijs = (parseFloat(inkoop_prijs) + transport_prijs) * 1.25;
-    $("input[name=aanbevolen_verkoopprijs]").val(aanbevolen_verkoopprijs.toFixed(2)).attr("readonly", true);
-  });
-
-</script>
-
 </body>
 </html>
