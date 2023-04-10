@@ -104,5 +104,19 @@ init_tail();
         });
     });
 </script>
-</body>
+
+<script>
+function calculateSellingPrice() {
+  var purchasePrice = parseFloat(document.getElementById('inkoop_prijs').value);
+  var transportPrice = parseFloat(document.getElementById('transport_prijs').value);
+  var recommendedSellingPrice = (purchasePrice + transportPrice) * 1.25;
+  document.getElementById('aanbevolen_verkoopprijs').value = recommendedSellingPrice.toFixed(2);
+}
+
+document.getElementById('transport_prijs').addEventListener('input', function() {
+  calculateSellingPrice();
+});
+</script>
+
+</script>
 </html>
