@@ -113,9 +113,15 @@ function calculateSellingPrice() {
   document.getElementById('aanbevolen_verkoopprijs').value = recommendedSellingPrice.toFixed(2);
 }
 
-document.getElementById('transport_prijs').addEventListener('input', function() {
-  calculateSellingPrice();
+$(document).ready(function() {
+  $("input[name=inkoop_prijs], input[name=transport_prijs]").on("input", function() {
+    var inkoop_prijs = $("input[name=inkoop_prijs]").val();
+    var transport_prijs = parseFloat($("input[name=transport_prijs]").val());
+    var aanbevolen_verkoopprijs = (parseFloat(inkoop_prijs) + transport_prijs) * 1.25;
+    $("input[name=aanbevolen_verkoopprijs]").val(aanbevolen_verkoopprijs.toFixed(2));
+  });
 });
+
 </script>
 
 </script>
