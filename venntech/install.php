@@ -217,7 +217,7 @@ function getItemsGroupId($CI, $db_prefix, $name)
     }
 }
 
-function insertItems($CI, $db_prefix, $group_id, $description, $rate, $kWp = 0, $kWh = 0, $forfait = 0, $gewicht = 0, $inkoopprijs = 0, $aanbevolen_verkoopprijs = 0)
+function insertItems($CI, $db_prefix, $group_id, $description, $rate, $kWp = 0, $kWh = 0, $forfait = 0, $gewicht = 0, $inkoopprijs = 0, $aanbevolen_verkoopprijs = 0, $transport_prijs = 0)
 {
     $CI->db->where('description', $description);
     $item = $CI->db->get("{$db_prefix}items")->row();

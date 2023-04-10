@@ -15,7 +15,6 @@ if (empty($items_extra->image_path)) {
 }
 
 ?>
-
 <div id="wrapper">
     <div class="content ">
         <div class="row ">
@@ -31,7 +30,7 @@ if (empty($items_extra->image_path)) {
                         <div class="row">
                             <div class="col-md-12">
 
-                            <?php echo render_select('items[group_id]', $groups, ['id', 'name'], _l('item_group_name'), $items->group_id, ['required' => true]); ?>
+                                <?php echo render_select('items[group_id]', $groups, ['id', 'name'], _l('item_group_name'), $items->group_id, ['required' => true]); ?>
                                 <?php echo render_input('items[description]', _l('invoice_item_add_edit_description'), $items->description, "text", ['required' => true, 'maxLength' => 255]); ?>
                                 <?php echo render_textarea('items[long_description]', _l('invoice_item_long_description'), $items->long_description, ['maxLength' => 1023]); ?>
                                 <?php echo render_input('items[rate]', _l('invoice_item_add_edit_rate_currency'), $items->rate, "number", ['required' => true, 'step' => 'any']); ?>
@@ -44,11 +43,9 @@ if (empty($items_extra->image_path)) {
                                 <?php echo render_input('items_extra[kilo_watt_uur]', _l('kilo_watt_uur'), $items_extra->kilo_watt_uur, "number", ['step' => 'any']); ?>
                                 <?php echo render_input('items_extra[gewicht]', _l('gewicht' ), $items_extra->gewicht, "number", ['step' => 'any']); ?>
 
-
                                 <?php echo render_textarea('items_extra[estimate_description]', _l('estimate_description'), $items_extra->estimate_description, ['maxLength' => 1023]); ?>
                                 <?php echo render_textarea('items_extra[technical_description]', _l('technical_description'), $items_extra->technical_description, ['maxLength' => 1023]); ?>
                                 <?php render_yes_no_option_venntech('items_extra[forfait]', _l('forfait'), $items_extra->forfait); ?>
-
 
                                 <!-- IMAGE Start -->
                                 <?php if (!empty($items_extra->image_path)) { ?>
@@ -86,7 +83,6 @@ if (empty($items_extra->image_path)) {
                             <?php } ?>
 
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -107,20 +103,6 @@ init_tail();
             'items[rate]': 'required'
         });
     });
-</script>
-<script type="text/javascript">
-    function calculate_price() {
-        var transport_prijs = parseFloat(document.getElementById('transport_prijs').value);
-        var inkoopprijs = parseFloat(document.getElementById('inkoopprijs').value);
-        if (isNaN(transport_prijs)) {
-            transport_prijs = 0;
-        }
-        if (isNaN(inkoopprijs)) {
-            inkoopprijs = 0;
-        }
-        var selling_price = (inkoopprijs + transport_prijs) * 1.25;
-        document.getElementById('aanbevolen_verkoopprijs').value = aanbevolen_verkoopprijs.toFixed(2);
-    }
 </script>
 </body>
 </html>
