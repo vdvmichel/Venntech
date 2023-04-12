@@ -81,7 +81,6 @@ class Product_model extends App_Model
 
             return $insert_id;
         }
-
         return false;
     }
 
