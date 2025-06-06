@@ -61,15 +61,33 @@ class Offertes extends AdminController
             // zonnepanelen_merk = item description
             // zonnepanelen_vermogen = item_extra kWp * 1000
             // totaal_vermogen = zonnepanelen_vermogen * aantal
-            $zonnepanelen_group_id = get_option('zonnepanelen_id');
-            $zonnepaneel_template_item = $this->estimate_template_items_model->get_by_estimate_template_releation($estimate_template_id, $zonnepanelen_group_id, 'groups');
-            $selected_zonnepaneel_item_id = $template_items_item_arr[$zonnepaneel_template_item->id]['items_id'][0];
-            $zonnepaneel_invoice_item = $this->invoice_items_model->get($selected_zonnepaneel_item_id);
-            $zonnepaneel_product = $this->product_model->get_by_item_id($selected_zonnepaneel_item_id);
+            $zonnepanelen_merk = 'N.v.t.'; // Or an empty string: ''
+            $zonnepanelen_vermogen = 0;
+            $totaal_vermogen = 0;
 
-            $zonnepanelen_merk = $zonnepaneel_invoice_item->description;
-            $zonnepanelen_vermogen = $zonnepaneel_product->kilo_watt_piek * 1000;
-            $totaal_vermogen = $zonnepanelen_vermogen * $data['number_of_panels'];
+            $zonnepanelen_group_id = get_option('zonnepanelen_id');
+            if ($zonnepanelen_group_id) {
+                $zonnepaneel_template_item = $this->estimate_template_items_model->get_by_estimate_template_releation($estimate_template_id, $zonnepanelen_group_id, 'groups');
+
+                // Check if $zonnepaneel_template_item is not null, and the expected keys exist in $template_items_item_arr
+                if ($zonnepaneel_template_item && isset($template_items_item_arr[$zonnepaneel_template_item->id]) && isset($template_items_item_arr[$zonnepaneel_template_item->id]['items_id'][0])) {
+                    $selected_zonnepaneel_item_id = $template_items_item_arr[$zonnepaneel_template_item->id]['items_id'][0];
+
+                    // Ensure $selected_zonnepaneel_item_id is not empty or null before proceeding
+                    if (!empty($selected_zonnepaneel_item_id)) {
+                        $zonnepaneel_invoice_item = $this->invoice_items_model->get($selected_zonnepaneel_item_id);
+                        $zonnepaneel_product = $this->product_model->get_by_item_id($selected_zonnepaneel_item_id);
+
+                        if ($zonnepaneel_invoice_item && $zonnepaneel_product) {
+                            $zonnepanelen_merk = $zonnepaneel_invoice_item->description;
+                            $zonnepanelen_vermogen = $zonnepaneel_product->kilo_watt_piek * 1000;
+                            // Ensure 'number_of_panels' exists and is numeric. Default to 0 if not.
+                            $number_of_panels_for_calc = (isset($data['number_of_panels']) && is_numeric($data['number_of_panels'])) ? $data['number_of_panels'] : 0;
+                            $totaal_vermogen = $zonnepanelen_vermogen * $number_of_panels_for_calc;
+                        }
+                    }
+                }
+            }
 
 
             if ($data['id'] == "") {
@@ -127,6 +145,36 @@ class Offertes extends AdminController
                 $client = $this->clients_model->get($data['clientid']);
                 $estimate_template_id = $data['estimate_template_id'];
 
+                // zonnepanelen_merk = item description
+                // zonnepanelen_vermogen = item_extra kWp * 1000
+                // totaal_vermogen = zonnepanelen_vermogen * aantal
+                $zonnepanelen_merk = 'N.v.t.'; // Or an empty string: ''
+                $zonnepanelen_vermogen = 0;
+                $totaal_vermogen = 0;
+
+                $zonnepanelen_group_id = get_option('zonnepanelen_id');
+                if ($zonnepanelen_group_id) {
+                    $zonnepaneel_template_item = $this->estimate_template_items_model->get_by_estimate_template_releation($estimate_template_id, $zonnepanelen_group_id, 'groups');
+
+                    // Check if $zonnepaneel_template_item is not null, and the expected keys exist in $template_items_item_arr
+                    if ($zonnepaneel_template_item && isset($template_items_item_arr[$zonnepaneel_template_item->id]) && isset($template_items_item_arr[$zonnepaneel_template_item->id]['items_id'][0])) {
+                        $selected_zonnepaneel_item_id = $template_items_item_arr[$zonnepaneel_template_item->id]['items_id'][0];
+
+                        // Ensure $selected_zonnepaneel_item_id is not empty or null before proceeding
+                        if (!empty($selected_zonnepaneel_item_id)) {
+                            $zonnepaneel_invoice_item = $this->invoice_items_model->get($selected_zonnepaneel_item_id);
+                            $zonnepaneel_product = $this->product_model->get_by_item_id($selected_zonnepaneel_item_id);
+
+                            if ($zonnepaneel_invoice_item && $zonnepaneel_product) {
+                                $zonnepanelen_merk = $zonnepaneel_invoice_item->description;
+                                $zonnepanelen_vermogen = $zonnepaneel_product->kilo_watt_piek * 1000;
+                                // Ensure 'number_of_panels' exists and is numeric. Default to 0 if not.
+                                $number_of_panels_for_calc = (isset($data['number_of_panels']) && is_numeric($data['number_of_panels'])) ? $data['number_of_panels'] : 0;
+                                $totaal_vermogen = $zonnepanelen_vermogen * $number_of_panels_for_calc;
+                            }
+                        }
+                    }
+                }
 
                 // we need to update estimate..
                 $estimates_id = $estimates_extra->estimates_id;
