@@ -43,7 +43,7 @@ if (!isset($item)) {
                                 </div>
 
                                 <?php echo render_select('staffid', $members, ['id', 'name'], _l('naam_sales_verkoper'), $item->staffid, ['required' => 'true']); ?>
-                                <?php echo render_input('commission_percentage', _l('commission_percentage'), '', "number", ['disabled' => true]); ?>
+                                <?php echo render_input('commission_percentage', _l('commission_percentage'), $item->commission_percentage ?? '', "number"); ?>
                                 <?php echo render_select('estimate_template_id', $estimate_templates_options, ['id', 'name'], _l('estimate_template'), $item->estimate_template_id, ['required' => true]); ?>
                                 <?php echo render_select('tax_id', $taxes, ['id', 'name', 'taxrate'], _l('tax'), $item->tax_id, ['required' => true]); ?>
                                 <?php echo render_input('number_of_panels', _l('number_of_panels'), $item->number_of_panels, "number", ['required' => true]); ?>
@@ -152,6 +152,7 @@ init_tail();
             'group_ids': 'required',
             // 'naam_sales_verkoper': 'required', // staffid is used instead
             'staffid': 'required',
+            'commission_percentage': 'number',
         });
 
         let estimate_template_id = "<?php echo $item->estimate_template_id ?>";
