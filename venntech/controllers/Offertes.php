@@ -22,7 +22,33 @@ class Offertes extends AdminController
         $this->load->model('samengestelde_product_model');
         $this->load->model('product_model');
         $this->load->model('type_kortingen_model');
+        // Ensure custom fields model is loaded if not already part of AdminController or App_Model
+        // For Perfex, custom fields are often handled by a general model or directly via DB.
+        // Let's assume direct DB access for custom fields for now, as is common in Perfex.
+    }
 
+    // Private helper function to get staff commission percentage
+    private function _get_staff_commission_percentage_value($staff_id) {
+        if (!$staff_id) {
+            return 0.00;
+        }
+
+        $this->db->select('id');
+        $this->db->where('fieldto', 'staff');
+        $this->db->where('slug', 'commissie_percentage');
+        $custom_field = $this->db->get(db_prefix() . 'customfields')->row();
+
+        if ($custom_field) {
+            $this->db->select('value');
+            $this->db->where('relid', $staff_id);
+            $this->db->where('fieldid', $custom_field->id);
+            $custom_field_value = $this->db->get(db_prefix() . 'customfieldsvalues')->row();
+
+            if ($custom_field_value && is_numeric($custom_field_value->value)) {
+                return (float) $custom_field_value->value;
+            }
+        }
+        return 0.00;
     }
 
     /* List all available groepen */
@@ -109,14 +135,47 @@ class Offertes extends AdminController
                     $staff_phone = $this->db->where('staffid' , $data['staffid'])->get(db_prefix().'staff')->row('phonenumber');
                     $estimate_extras['sale_agent_phonenumber'] = $staff_phone;
 
+                    // Determine commission percentage
+                    $commission_percentage = 0.00;
+                    if (isset($data['commission_percentage']) && is_numeric($data['commission_percentage']) && $data['commission_percentage'] !== '') {
+                        // Use value from form input if it's valid and provided
+                        $commission_percentage = (float) $data['commission_percentage'];
+                    } else {
+                        // Otherwise, fetch the default for the staff member
+                        $commission_percentage = $this->_get_staff_commission_percentage_value($data['staffid']);
+                    }
+                    $estimate_extras['commission_percentage'] = $commission_percentage;
+                    // Commission amount will be calculated and updated after subtotal is known
+
                     $estimates_extra_id = $this->estimates_extra_model->add($estimate_extras);
 
-                    $this->update_estimate_itemables($estimate_extras, $estimates_extra_id, $estimate_template_id, $template_items_item_arr, $all_verbruiksmaterialen);
-                    $this->update_customfieldsvalues($estimate_extras);
+                    if ($estimates_extra_id) {
+                        // This function also updates the main estimate's subtotal and total
+                        $updated_estimate_totals = $this->update_estimate_itemables($estimate_extras, $estimates_extra_id, $estimate_template_id, $template_items_item_arr, $all_verbruiksmaterialen);
 
-                    set_alert('success', _l('added_successfully', _l('estimates')));
+                        $commission_amount = 0.00;
+                        if ($commission_percentage > 0 && isset($updated_estimate_totals['subtotal'])) {
+                            $commission_amount = round(($updated_estimate_totals['subtotal'] * $commission_percentage) / 100, 2);
+                        }
+
+                        // Add commission_amount to $estimate_extras for custom field update and pc_estimates_extra update
+                        $estimate_extras['commission_amount'] = $commission_amount;
+
+                        // Update pc_estimates_extra with commission_amount AND the original commission_percentage
+                        $this->estimates_extra_model->edit([
+                            'commission_amount' => $commission_amount,
+                            'commission_percentage' => $commission_percentage // Ensure this is also passed if edit only updates specified fields
+                        ], $estimates_extra_id);
+
+                        $this->update_customfieldsvalues($estimate_extras); // Now $estimate_extras contains commission_amount
+                        set_alert('success', _l('added_successfully', _l('estimates')));
+                    } else {
+                        // Error adding to estimates_extra_model
+                        set_alert('danger', _l('problem_creating', _l('estimates_extra')));
+                    }
+
                 } else {
-                    set_alert('error', $estimates_id);
+                    set_alert('error', _l('problem_creating', _l('estimate'))); // Error from $this->estimates_model->add()
                 }
             } else {
 
@@ -168,15 +227,46 @@ class Offertes extends AdminController
                 $staff_phone = $this->db->where('staffid' , $data['staffid'])->get(db_prefix().'staff')->row('phonenumber');
                     $estimate_extras['sale_agent_phonenumber'] = $staff_phone;
 
-                $this->estimates_extra_model->edit($estimate_extras, $estimates_extra_id);
+                // Determine commission percentage
+                $commission_percentage = 0.00;
+                if (isset($data['commission_percentage']) && is_numeric($data['commission_percentage']) && $data['commission_percentage'] !== '') {
+                    // Use value from form input if it's valid and provided
+                    $commission_percentage = (float) $data['commission_percentage'];
+                } else {
+                    // Otherwise, fetch the default for the staff member
+                    $commission_percentage = $this->_get_staff_commission_percentage_value($data['staffid']);
+                }
+                $estimate_extras['commission_percentage'] = $commission_percentage;
+                // Commission amount will be calculated and updated after subtotal is known
 
-                $this->update_estimate_itemables($estimate_extras, $estimates_extra_id, $estimate_template_id, $template_items_item_arr, $all_verbruiksmaterialen);
-                $this->update_customfieldsvalues($estimate_extras);
+                $success_edit_extra = $this->estimates_extra_model->edit($estimate_extras, $estimates_extra_id);
 
-                set_alert('success', _l('updated_successfully', _l('estimates')));
+                if ($success_edit_extra) {
+                    // This function also updates the main estimate's subtotal and total
+                    $updated_estimate_totals = $this->update_estimate_itemables($estimate_extras, $estimates_extra_id, $estimate_template_id, $template_items_item_arr, $all_verbruiksmaterialen);
+
+                    $commission_amount = 0.00;
+                    if ($commission_percentage > 0 && isset($updated_estimate_totals['subtotal'])) {
+                        $commission_amount = round(($updated_estimate_totals['subtotal'] * $commission_percentage) / 100, 2);
+                    }
+
+                    // Add commission_amount to $estimate_extras for custom field update and pc_estimates_extra update
+                    $estimate_extras['commission_amount'] = $commission_amount;
+
+                    // Update pc_estimates_extra with commission_amount AND the original commission_percentage
+                    $this->estimates_extra_model->edit([
+                        'commission_amount' => $commission_amount,
+                        'commission_percentage' => $commission_percentage // Ensure this is also passed if edit only updates specified fields
+                    ], $estimates_extra_id);
+
+                    $this->update_customfieldsvalues($estimate_extras); // Now $estimate_extras contains commission_amount
+                    set_alert('success', _l('updated_successfully', _l('estimates')));
+                } else {
+                     set_alert('danger', _l('problem_updating', _l('estimates_extra')));
+                }
             }
 
-            if (array_key_exists('save_and_send', $data)) {
+            if (isset($estimates_id) && array_key_exists('save_and_send', $data)) {
                 $this->estimates_model->send_estimate_to_client($estimates_id, '', true, '', true);
             }
 
@@ -402,7 +492,10 @@ class Offertes extends AdminController
             'zonnepanneel_vermogen' => 'estimate_zonnepanneel_vermogen',
             'totaal_vermogen' => 'estimate_totaal_vermogen',
             'sale_agent_phonenumber' => 'estimate_sale_agent_phonenumber',
-            'naam_sales_verkoper' => 'estimate_naam_sales_verkoper',];
+            'naam_sales_verkoper' => 'estimate_naam_sales_verkoper',
+            'commission_percentage' => 'estimate_commission_percentage',
+            'commission_amount' => 'estimate_commission_amount',
+        ];
 
         // delete all related custom fields
         $this->db->where('relid', $estimate_extras['estimates_id']);
@@ -414,12 +507,14 @@ class Offertes extends AdminController
             $this->db->where('slug', $slug);
             $custom_field = $this->db->get(db_prefix() . "customfields")->row();
 
-            $custom['relid'] = $estimate_extras['estimates_id'];
-            $custom['fieldid'] = $custom_field->id;
-            $custom['fieldto'] = 'estimate';
-            $custom['value'] = $estimate_extras[$key];
-            $this->db->insert(db_prefix() . "customfieldsvalues", $custom);
-            $this->db->insert_id();
+            if ($custom_field && isset($estimate_extras[$key])) { // Ensure the key exists in $estimate_extras
+                $custom['relid'] = $estimate_extras['estimates_id'];
+                $custom['fieldid'] = $custom_field->id;
+                $custom['fieldto'] = 'estimate';
+                $custom['value'] = $estimate_extras[$key];
+                $this->db->insert(db_prefix() . "customfieldsvalues", $custom);
+                $this->db->insert_id();
+            }
         }
     }
 
@@ -667,6 +762,9 @@ class Offertes extends AdminController
             'discount_total' => $discount_total,
             'discount_type' => $discount_type
         ]);
+
+        // Return totals for commission calculation
+        return ['subtotal' => $subtotal, 'total' => $total, 'total_tax' => $total_tax];
     }
 
     /**
@@ -721,5 +819,25 @@ class Offertes extends AdminController
         }
 
         return $items;
+    }
+
+    public function get_staff_commission_percentage($staff_id = '')
+    {
+        if (!$staff_id) {
+            $staff_id = $this->input->get('staff_id');
+        }
+
+        if (!$staff_id) {
+            echo json_encode(['success' => false, 'message' => 'Staff ID not provided.']);
+            return;
+        }
+
+        $commission_percentage = $this->_get_staff_commission_percentage_value($staff_id);
+
+        if ($commission_percentage !== null) {
+            echo json_encode(['success' => true, 'commission_percentage' => $commission_percentage]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Commission percentage not found for staff.']);
+        }
     }
 }

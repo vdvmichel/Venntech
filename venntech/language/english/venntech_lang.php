@@ -21,3 +21,7 @@ $lang['estimate_templates']                          = 'Estimate Templates';
 
 $lang['inspectie_rapport']                          = 'Inspection Rapport';
 $lang['inspectie_rapporten']                          = 'Inspection Rapports';
+
+$lang['staff_commission_percentage'] = 'Staff Commission Percentage';
+$lang['estimate_commission_percentage'] = 'Estimate Commission Percentage';
+$lang['estimate_commission_amount'] = 'Estimate Commission Amount';

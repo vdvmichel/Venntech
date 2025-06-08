@@ -23,6 +23,7 @@ $aColumns = [
     $estimates . '.date as datum',
     $tax . '.taxrate as tax_id',
     $table . '.number_of_panels as number_of_panels',
+    $table . '.commission_amount as commission_amount', // Added commission_amount
     db_prefix() . 'estimates.status'
 ];
 $sIndexColumn = 'id';
@@ -78,6 +79,7 @@ foreach ($rResult as $aRow) {
     $row[] = '<a href="/admin/venntech/offertes/edit/' . $aRow['id'] . '">' . $aRow['datum'] . '</a>';
     $row[] = '<a href="/admin/venntech/offertes/edit/' . $aRow['id'] . '">' . 'BTW %'  . $aRow['tax_id'] . '</a>';
     $row[] = '<a href="/admin/venntech/offertes/edit/' . $aRow['id'] . '">' . $aRow['number_of_panels'] . '</a>';
+    $row[] = app_format_money($aRow['commission_amount'], $aRow['currency_name']); // Added commission_amount output
     $row[] = '<a href="/admin/venntech/offertes/edit/' . $aRow['id'] . '">' .format_estimate_status( $aRow[db_prefix() . 'estimates.status']). '</a>';
 
 
