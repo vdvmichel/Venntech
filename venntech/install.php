@@ -261,6 +261,9 @@ insertCustomfields($CI, $db_prefix, 'estimate', 'Zonnepaneel Merk', 'estimate_zo
 insertCustomfields($CI, $db_prefix, 'estimate', 'Zonnepanneel vermogen', 'estimate_zonnepanneel_vermogen', 'number');
 insertCustomfields($CI, $db_prefix, 'estimate', 'Totaal vermogen', 'estimate_totaal_vermogen', 'number');
 insertCustomfields($CI, $db_prefix, 'estimate', 'Naam Sales Verkoper', 'estimate_naam_sales_verkoper', 'input');
+insertCustomfields($CI, $db_prefix, 'estimate', 'Commissie Percentage Offerte', 'estimate_commission_percentage', 'number');
+insertCustomfields($CI, $db_prefix, 'estimate', 'Commissie Bedrag Offerte', 'estimate_commission_amount', 'number');
+insertCustomfields($CI, $db_prefix, 'staff', 'Commissie Percentage', 'commissie_percentage', 'number');
 
 // insert default values for items_groups if not exists
 $zonnepanelen_id = getItemsGroupId($CI, $db_prefix, "Zonnepanelen");
@@ -1098,4 +1101,11 @@ if (!$CI->db->table_exists($table)) {
 
 if (!$CI->db->field_exists('sale_agent_phonenumber', 'pc_estimates_extra')) {
     $CI->db->query('ALTER TABLE `' . db_prefix() . 'pc_estimates_extra`  ADD COLUMN `sale_agent_phonenumber` VARCHAR(255) NULL DEFAULT NULL');
+}
+
+if (!$CI->db->field_exists('commission_percentage', db_prefix() . 'pc_estimates_extra')) {
+    $CI->db->query('ALTER TABLE `' . db_prefix() . 'pc_estimates_extra` ADD `commission_percentage` DECIMAL(5,2) DEFAULT 0.00');
+}
+if (!$CI->db->field_exists('commission_amount', db_prefix() . 'pc_estimates_extra')) {
+    $CI->db->query('ALTER TABLE `' . db_prefix() . 'pc_estimates_extra` ADD `commission_amount` DECIMAL(10,2) DEFAULT 0.00');
 }

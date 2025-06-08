@@ -232,3 +232,6 @@ $lang['gewicht']                                  ='Gewicht(kg)';
 $lang['bebat_batterij']                           ='Bebat Batterij';
 $lang['unit_prijs_per_panel']                     ='Unit Prijs Per Panel';
 
+$lang['staff_commission_percentage'] = 'Commissiepercentage Medewerker';
+$lang['estimate_commission_percentage'] = 'Commissiepercentage Offerte';
+$lang['estimate_commission_amount'] = 'Commissiebedrag Offerte';

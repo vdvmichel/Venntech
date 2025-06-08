@@ -42,7 +42,8 @@ if (!isset($item)) {
                                     </div>
                                 </div>
 
-                                <?php echo render_select('staffid', $members, ['id', 'name'], _l('naam_sales_verkoper'), $item->staffid, ['onchange' => 'changeCalendar(this)', 'required' => 'true']); ?>
+                                <?php echo render_select('staffid', $members, ['id', 'name'], _l('naam_sales_verkoper'), $item->staffid, ['required' => 'true']); ?>
+                                <?php echo render_input('commission_percentage', _l('commission_percentage'), '', "number", ['disabled' => true]); ?>
                                 <?php echo render_select('estimate_template_id', $estimate_templates_options, ['id', 'name'], _l('estimate_template'), $item->estimate_template_id, ['required' => true]); ?>
                                 <?php echo render_select('tax_id', $taxes, ['id', 'name', 'taxrate'], _l('tax'), $item->tax_id, ['required' => true]); ?>
                                 <?php echo render_input('number_of_panels', _l('number_of_panels'), $item->number_of_panels, "number", ['required' => true]); ?>
@@ -102,16 +103,18 @@ if (!isset($item)) {
 
                                         <div id="all_verbruiksmaterialen">
                                             <?php
-                                            foreach ($all_verbruiksmaterialen as $key => $item_arr) {
-                                                echo '<div id="select-all_verbruiksmaterialen-index-' . $key . '" class="row">';
-                                                echo '<div class="col-xs-7">';
-                                                echo render_select('all_verbruiksmaterialen[' . $key . '][items_id]', $verbruiksmaterialen, ['id', 'name'], _l('product'), $item_arr['items_id'], ['required' => true]);
-                                                echo '</div>';
-                                                echo '<div class="col-xs-3">';
-                                                echo render_input('all_verbruiksmaterialen[' . $key . '][qty]', _l('aantal'), $item_arr['quantity'], 'number', ['required' => true]);
-                                                echo '</div>';
-                                                echo '<div class="col-xs-2" style="padding-top: 30px"><button type="button" class="btn btn-danger btn-icon" onclick="removeRecordRow(\'all_verbruiksmaterialen\', ' . $key . ')"><i class="fa fa-minus"></i></button></div>';
-                                                echo '</div>';
+                                            if (isset($all_verbruiksmaterialen) && is_array($all_verbruiksmaterialen)) {
+                                                foreach ($all_verbruiksmaterialen as $key => $item_arr) {
+                                                    echo '<div id="select-all_verbruiksmaterialen-index-' . $key . '" class="row">';
+                                                    echo '<div class="col-xs-7">';
+                                                    echo render_select('all_verbruiksmaterialen[' . $key . '][items_id]', $verbruiksmaterialen, ['id', 'name'], _l('product'), $item_arr['items_id'], ['required' => true]);
+                                                    echo '</div>';
+                                                    echo '<div class="col-xs-3">';
+                                                    echo render_input('all_verbruiksmaterialen[' . $key . '][qty]', _l('aantal'), $item_arr['quantity'], 'number', ['required' => true]);
+                                                    echo '</div>';
+                                                    echo '<div class="col-xs-2" style="padding-top: 30px"><button type="button" class="btn btn-danger btn-icon" onclick="removeRecordRow(\'all_verbruiksmaterialen\', ' . $key . ')"><i class="fa fa-minus"></i></button></div>';
+                                                    echo '</div>';
+                                                }
                                             }
                                             ?>
                                         </div>
@@ -147,55 +150,84 @@ init_tail();
             'tax_id': 'required',
             'number_of_panels': 'required',
             'group_ids': 'required',
-            'naam_sales_verkoper': 'required',
+            // 'naam_sales_verkoper': 'required', // staffid is used instead
+            'staffid': 'required',
         });
 
         let estimate_template_id = "<?php echo $item->estimate_template_id ?>";
         if (estimate_template_id != '') {
             $.ajax({
-                url: '/admin/venntech/offertes/estimate_template_items_html',
+                url: admin_url + 'venntech/offertes/estimate_template_items_html',
                 method: 'post',
                 data: {template_id: estimate_template_id, estimates_extra_id: "<?php echo $item->id ?>"},
                 dataType: 'json',
                 success: function (response) {
-                    var len = response.length;
-
-                    let groupsHTML = response.groupsHTML;
-                    $('#estimate_template_items').empty();
-                    $('#estimate_template_items').append(groupsHTML);
-
-                    $('#estimate_template_items').find('select').selectpicker('refresh');
-
+                    if (response.success) {
+                        let groupsHTML = response.groupsHTML;
+                        $('#estimate_template_items').empty();
+                        $('#estimate_template_items').append(groupsHTML);
+                        $('#estimate_template_items').find('select').selectpicker('refresh');
+                    }
                 }
             });
+        }
+
+        // Fetch initial commission percentage if staffid is already selected
+        let initialStaffId = $('select[name="staffid"]').val();
+        if (initialStaffId) {
+            fetchCommissionPercentage(initialStaffId);
         }
     });
 
     $('#estimate_template_id').change(function () {
-
         $('#groups_element_id').empty();
-
         var template_id = $(this).val();
         $.ajax({
-            url: '/admin/venntech/offertes/estimate_template_items_html',
+            url: admin_url + 'venntech/offertes/estimate_template_items_html',
             method: 'post',
             data: {template_id: template_id, estimates_extra_id: ''},
             dataType: 'json',
             success: function (response) {
-                var len = response.length;
-
-                let groupsHTML = response.groupsHTML;
-                $('#estimate_template_items').empty();
-                $('#estimate_template_items').append(groupsHTML);
-
-                $('#estimate_template_items').find('select').selectpicker('refresh');
-
+                if (response.success) {
+                    let groupsHTML = response.groupsHTML;
+                    $('#estimate_template_items').empty();
+                    $('#estimate_template_items').append(groupsHTML);
+                    $('#estimate_template_items').find('select').selectpicker('refresh');
+                }
             }
         });
     });
 
-    function addItemsRow() {
+    $('select[name="staffid"]').change(function() {
+        let staff_id = $(this).val();
+        fetchCommissionPercentage(staff_id);
+    });
 
+    function fetchCommissionPercentage(staff_id) {
+        if (staff_id) {
+            $.ajax({
+                url: admin_url + 'venntech/offertes/get_staff_commission_percentage/' + staff_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success && response.commission_percentage !== null) {
+                        $('input[name="commission_percentage"]').val(response.commission_percentage);
+                    } else {
+                        $('input[name="commission_percentage"]').val(''); // Clear if not found or error
+                        // console.error('Could not fetch commission percentage or percentage not set.');
+                    }
+                },
+                error: function() {
+                    $('input[name="commission_percentage"]').val(''); // Clear on error
+                    // console.error('AJAX error fetching commission percentage.');
+                }
+            });
+        } else {
+            $('input[name="commission_percentage"]').val(''); // Clear if no staff_id
+        }
+    }
+
+    function addItemsRow() {
         let allProductsElements = $('#all_verbruiksmaterialen');
         let key = allProductsElements.find('select').length;
 
@@ -208,7 +240,6 @@ init_tail();
         select_options = select_options.replaceAll('CHANGE_SELECT_NAME_AND_ID', id_tobe);
         aantal_input = aantal_input.replaceAll('CHANGE_INPUT_NAME_AND_ID', aantal_tobe);
 
-        // we have to change names and ids of the render and yes no in javascript!! because our key is calculated in javascript!!
         let selectHTML = '<div id="select-all_verbruiksmaterialen-index-' + key + '" class="row">';
         selectHTML += '<div class="col-xs-7">' + select_options + '</div>';
         selectHTML += '<div class="col-xs-3">' + aantal_input + '</div>';
@@ -222,7 +253,6 @@ init_tail();
     function removeRecordRow(array_name, key) {
         let selector = '#select-' + array_name + '-index-' + key;
         $(selector).remove();
-
     }
 
 </script>
